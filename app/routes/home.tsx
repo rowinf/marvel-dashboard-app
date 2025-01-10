@@ -10,10 +10,7 @@ export function meta({ }: Route.MetaArgs) {
   ];
 }
 
-export const fetchCharacterList = async (nameStartsWith: string | null, comics: string | null) => {
-  const query = new URLSearchParams([['apikey', import.meta.env.VITE_APP_PUBLIC_MARVEL_KEY]]);
-  if (nameStartsWith) query.append("nameStartsWith", nameStartsWith);
-  if (comics) query.append("comics", comics);
+export const fetchCharacterList = async (query: URLSearchParams) => {
   const result = await fetch(`https://gateway.marvel.com/v1/public/characters?${query}`).then(res => res.json());
   if (result.code != 200) throw new Error(`The Service returned an error [${result.code}]: ${result.message}`);
   return result as MarvelCharacterData;
@@ -27,11 +24,16 @@ export const fetchCharacterList = async (nameStartsWith: string | null, comics: 
 export async function clientLoader({
   request
 }: Route.ClientLoaderArgs) {
+  const query = new URLSearchParams([['apikey', import.meta.env.VITE_APP_PUBLIC_MARVEL_KEY]]);
   const url = new URL(request.url);
   const nameStartsWith = url.searchParams.get("nameStartsWith");
   const comics = url.searchParams.get("comics");
+  const orderBy = url.searchParams.get("orderBy");  
+  if (nameStartsWith) query.append("nameStartsWith", nameStartsWith);
+  if (comics) query.append("comics", comics);
+  if (orderBy) query.append("orderBy", orderBy);
 
-  return fetchCharacterList(nameStartsWith, comics);
+  return fetchCharacterList(query);
 }
 
 export function HydrateFallback() {

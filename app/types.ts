@@ -12,6 +12,6 @@ export interface MarvelCharacterResult {
 export interface MarvelCharacterData {
     data: {
         results: MarvelCharacterResult[];
-        attributionText: string;
     }
+    attributionText: string;
 }
