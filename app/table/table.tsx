@@ -1,34 +1,35 @@
-import type { FormEvent, FormEventHandler } from "react";
-import { Link } from "react-router";
-import type { MarvelCharacterData } from "~/types";
+import type {  FormEventHandler } from "react";
+import { Form, Link, useSearchParams, useSubmit } from "react-router";
+import type { MarvelCharacterResult } from "~/types";
 
 interface TableProps {
-    data: MarvelCharacterData;
-    onSubmitSearch: FormEventHandler<HTMLFormElement>;
+    results: MarvelCharacterResult[];
 }
 
-export const Table = ({ data, onSubmitSearch }: TableProps) => {
-    const { results } = data;
+export const Table = ({ results }: TableProps) => {
+    const [q] = useSearchParams();
+    let submit = useSubmit();
     return (
         <section>
-            <form onSubmit={onSubmitSearch} className="flex gap-2 mb-8">
+            <Form className="flex gap-2 mb-8" onSubmit={(event) => {
+              submit(event.currentTarget, {replace: true});
+            }}>
                 <div className="flex-col">
-                    <label htmlFor="character-name" className="block text-sm/6 font-medium text-gray-900">First name</label>
+                    <label htmlFor="name" className="block text-sm/6 font-medium">First name</label>
                     <div className="mt-2">
-                        <input type="text" name="character-name" id="character-name" placeholder="Character Name" className="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6 border rounded-md"></input>
+                        <input defaultValue={q.get("nameStartsWith") || ''} type="text" name="nameStartsWith" id="name" placeholder="Character Name" className="block min-w-0 grow py-1.5 pl-1 pr-3 text-base focus:outline focus:outline-0 sm:text-sm/6 border rounded-md"></input>
                     </div>
                 </div>
                 <div className="flex-col">
-                    <label htmlFor="comic-id" className="block text-sm/6 font-medium text-gray-900">Comics (comma separated)</label>
+                    <label htmlFor="comics" className="block text-sm/6 font-medium">Comics</label>
                     <div className="mt-2">
-                        <input type="text" name="comic-id" id="comic-id" placeholder="Comics (comma separated)" className="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6 border rounded-md"></input>
+                        <input type="text" name="comics" id="comics" placeholder="Comma separated list" className="block min-w-0 grow py-1.5 pl-1 pr-3 text-base focus:outline focus:outline-0 sm:text-sm/6 border rounded-md"></input>
                     </div>
                 </div>
-                <div className="mt-6 flex items-center justify-end gap-x-6">
-                    <button type="button" className="text-sm/6 font-semibold text-gray-900">Clear</button>
-                    <button type="submit" className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Search</button>
+                <div className="flex items-end justify-end gap-x-6">
+                    <button type="submit" className="rounded-md bg-indigo-600 px-3 py-2 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Search</button>
                 </div>
-            </form>
+            </Form>
             <table>
                 <thead>
                     <tr>
