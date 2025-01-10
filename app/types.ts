@@ -12,6 +12,7 @@ export interface MarvelCharacterResult {
 export interface MarvelCharacterData {
     data: {
         results: MarvelCharacterResult[];
+        total: number;
     }
     attributionText: string;
 }

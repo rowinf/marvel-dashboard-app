@@ -1,36 +1,47 @@
+import { useState } from "react";
 import { Form, Link, useSearchParams, useSubmit } from "react-router";
 import type { MarvelCharacterResult } from "~/types";
 
 interface TableProps {
     results: MarvelCharacterResult[];
+    total: number;
 }
 
-export const Table = ({ results }: TableProps) => {
+export const Table = ({ results, total }: TableProps) => {
     const [q] = useSearchParams();
-    let submit = useSubmit();
+    const limit = 20;
+    const submit = useSubmit();
+    const offset = Number(q.get("offset"))
+    const isNextPage = total > offset + results.length
 
     return (
-        <section>
-            <Form onSubmit={(event) => {
-                submit(event.currentTarget, { replace: true });
-            }}>
-                <legend className="flex gap-2 mb-8">
-                    <div className="flex-col">
-                        <label htmlFor="name" className="block text-sm/6 font-medium">First name</label>
-                        <div className="mt-2">
-                            <input defaultValue={q.get("nameStartsWith") || ''} type="text" name="nameStartsWith" id="name" placeholder="Character Name" className="block min-w-0 grow py-1.5 pl-1 pr-3 text-base focus:outline focus:outline-0 sm:text-sm/6 border rounded-md"></input>
-                        </div>
+        <Form onSubmit={(event) => {
+            submit(event.currentTarget, { replace: true });
+        }}>
+            <legend className="flex gap-2 mb-8">
+                <div className="flex-col">
+                    <label htmlFor="name" className="block text-sm/6 font-medium">First name</label>
+                    <div className="mt-2">
+                        <input defaultValue={q.get("nameStartsWith") || ''} type="text" name="nameStartsWith" id="name" placeholder="Character Name" className="block min-w-0 grow py-1.5 pl-1 pr-3 text-base focus:outline focus:outline-0 sm:text-sm/6 border rounded-md"></input>
                     </div>
-                    <div className="flex-col">
-                        <label htmlFor="comics" className="block text-sm/6 font-medium">Comics</label>
-                        <div className="mt-2">
-                            <input type="text" name="comics" id="comics" placeholder="Comma separated list" className="block min-w-0 grow py-1.5 pl-1 pr-3 text-base focus:outline focus:outline-0 sm:text-sm/6 border rounded-md"></input>
-                        </div>
+                </div>
+                <div className="flex-col">
+                    <label htmlFor="comics" className="block text-sm/6 font-medium">Comics</label>
+                    <div className="mt-2">
+                        <input defaultValue={q.get("comics") || ''} type="text" name="comics" id="comics" placeholder="Comma separated list" className="block min-w-0 grow py-1.5 pl-1 pr-3 text-base focus:outline focus:outline-0 sm:text-sm/6 border rounded-md"></input>
                     </div>
-                    <div className="flex items-end justify-end gap-x-6">
-                        <button type="submit" className="rounded-md bg-indigo-600 px-3 py-2 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Search</button>
+                </div>
+                <div className="flex-col invisible hidden">
+                    <label htmlFor="offset" className="block text-sm/6 font-medium">Offset</label>
+                    <div className="mt-2">
+                        <input defaultValue={q.get("offset") || ''} type="text" name="offset" id="offset" placeholder="offset" className="block min-w-0 grow py-1.5 pl-1 pr-3 text-base focus:outline focus:outline-0 sm:text-sm/6 border rounded-md"></input>
                     </div>
-                </legend>
+                </div>
+                <div className="flex items-end justify-end gap-x-6">
+                    <button type="submit" className="rounded-md bg-indigo-600 px-3 py-2 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Search</button>
+                </div>
+            </legend>
+            {results.length === 0 ? <p className="text-xl">No results</p> :
                 <table>
                     <thead>
                         <tr>
@@ -67,16 +78,38 @@ export const Table = ({ results }: TableProps) => {
                     <tbody>
                         {results.map((result: MarvelCharacterResult) => (
                             <tr key={result.id}>
-                                <td className="text-center">
-                                    <img src={`${result.thumbnail.path}.${result.thumbnail.extension}`} className="object-cover h-auto"></img>
+                                <td className="text-center max-w-96">
+                                    <img src={`${result.thumbnail.path}.${result.thumbnail.extension}`} className="object-cover h-auto max-w-full"></img>
                                 </td>
                                 <td><Link to={`/character/${result.id}`} className="text-blue-600 hover:underline">{result.name}</Link></td>
                                 <td>{result.description}</td>
                             </tr>
                         ))}
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <td>
+                                <button onClick={(event) => {
+                                    const form = event.currentTarget.form;
+                                    if (form) form.offset.value = offset - limit;
+                                    submit(form, { replace: true });
+                                }} className={`text-blue-600 ${offset == 0 ? "invisible" : ""}`}>
+                                    Previous Page
+                                </button>
+                            </td>
+                            <td>
+                                <button onClick={(event) => {
+                                    const form = event.currentTarget.form;
+                                    if (form) form.offset.value = offset + limit;
+                                    submit(form, { replace: true });
+                                }} className={`text-blue-600 ${isNextPage ? "" : "invisible"}`}>
+                                    Next Page
+                                </button>
+                            </td>
+                        </tr>
+                    </tfoot>
                 </table>
-            </Form>
-        </section>
+            }
+        </Form>
     )
 }

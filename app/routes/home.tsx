@@ -28,10 +28,12 @@ export async function clientLoader({
   const url = new URL(request.url);
   const nameStartsWith = url.searchParams.get("nameStartsWith");
   const comics = url.searchParams.get("comics");
-  const orderBy = url.searchParams.get("orderBy");  
+  const orderBy = url.searchParams.get("orderBy");
+  const offset = url.searchParams.get("offset");
   if (nameStartsWith) query.append("nameStartsWith", nameStartsWith);
   if (comics) query.append("comics", comics);
   if (orderBy) query.append("orderBy", orderBy);
+  if (offset) query.append("offset", offset);
 
   return fetchCharacterList(query);
 }
@@ -40,6 +42,6 @@ export function HydrateFallback() {
   return <p>Loading Characters...</p>;
 }
 
-export default function Home({}: Route.ComponentProps) {
+export default function Home({ }: Route.ComponentProps) {
   return <CharacterList />;
 }
