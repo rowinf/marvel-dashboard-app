@@ -1,4 +1,5 @@
-import { useLoaderData } from "react-router"
+import { Link, useLoaderData } from "react-router"
+import { Table } from "~/table/table";
 import type { MarvelCharacterData } from "~/types"
 
 
@@ -15,7 +16,15 @@ export const CharacterDetails = () => {
                     {result.description ? <p>{result.description}</p> : <em>No description</em>}
                 </div>
             </section>
+            <Table hideControls headers={["Comic Book"]} results={result.comics.items} total={result.comics.available} renderRow={(result) => (
+                <tr key={result.id} className="flex flex-col flex-1 gap-4 border-b md:gap-6 lg:gap-8 sm:table-row">
+                    <td className="block sm:table-cell">
+                        <Link to={`/?search=${result.resourceURI.slice(43)}`} className="text-blue-600 hover:underline font-medium text-lg" viewTransition>{result.name}</Link>
+                    </td>
+                </tr>
+            )} renderHeader={(header) => <th className="p-2">{header}</th>} />
             <footer>
+                <p className="italic">showing {result.comics.returned} / {result.comics.available} available comics</p>
                 <p className="text-sm">{data.attributionText}</p>
             </footer>
         </main>

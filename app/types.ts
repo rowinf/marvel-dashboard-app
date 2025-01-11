@@ -7,6 +7,14 @@ export interface MarvelCharacterResult {
         path: string;
         extension: string;
     }
+    comics: {
+        returned: number;
+        available: number;
+        items: [{
+            resourceURI: string;
+            name: string;
+        }]
+    }
 }
 
 export interface MarvelCharacterData {

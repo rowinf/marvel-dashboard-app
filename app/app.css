@@ -13,7 +13,7 @@ body {
 
 @layer components {
   td > button {
-    @apply relative inline-flex justify-center px-2 py-2 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 focus:z-20 focus:outline-offset-0 w-full;
+    @apply relative inline-flex justify-center px-2 py-2 ring-1 ring-inset ring-gray-300 focus:z-20 focus:outline-offset-0 w-full;
   }
   td > button:first-of-type {
     @apply rounded-l-md;
@@ -23,5 +23,8 @@ body {
   }
   td > button:disabled {
     @apply text-gray-300 cursor-not-allowed;
+  }
+  td > button:hover:not(:disabled) {
+    @apply bg-gray-50 hover:bg-gray-800;
   }
 }
