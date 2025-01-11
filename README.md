@@ -1,3 +1,7 @@
+# Project Setup
+
+For notes about setting up the project, see SETUP.md
+
 # Welcome to React Router!
 
 A modern, production-ready template for building full-stack React applications using React Router.
