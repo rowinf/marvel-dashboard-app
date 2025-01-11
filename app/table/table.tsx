@@ -1,5 +1,5 @@
-import { useState } from "react";
 import { Form, Link, useSearchParams, useSubmit } from "react-router";
+import { ChevronDown, ChevronUp } from "~/icons";
 import type { MarvelCharacterResult } from "~/types";
 
 interface TableProps {
@@ -15,20 +15,34 @@ export const Table = ({ results, total }: TableProps) => {
     const isNextPage = total > offset + results.length
 
     return (
-        <Form onSubmit={(event) => {
-            submit(event.currentTarget, { replace: true });
-        }}>
+        <Form>
             <legend className="flex gap-2 mb-8">
                 <div className="flex-col">
                     <label htmlFor="name" className="block text-sm/6 font-medium">First name</label>
                     <div className="mt-2">
-                        <input defaultValue={q.get("nameStartsWith") || ''} type="text" name="nameStartsWith" id="name" placeholder="Character Name" className="block min-w-0 grow py-1.5 pl-1 pr-3 text-base focus:outline focus:outline-0 sm:text-sm/6 border rounded-md"></input>
+                        <input
+                            onChange={(event) => {
+                                const form = event.currentTarget.form;
+                                if (form) form.offset.value = "";
+                            }}
+                            type="text" name="nameStartsWith" id="name"
+                            defaultValue={q.get("nameStartsWith") || ''}
+                            placeholder="Character Name"
+                            className="block min-w-0 grow py-1.5 pl-1 pr-3 text-base focus:outline focus:outline-0 sm:text-sm/6 border rounded-md"></input>
                     </div>
                 </div>
                 <div className="flex-col">
                     <label htmlFor="comics" className="block text-sm/6 font-medium">Comics</label>
                     <div className="mt-2">
-                        <input defaultValue={q.get("comics") || ''} type="text" name="comics" id="comics" placeholder="Comma separated list" className="block min-w-0 grow py-1.5 pl-1 pr-3 text-base focus:outline focus:outline-0 sm:text-sm/6 border rounded-md"></input>
+                        <input
+                            onChange={(event) => {
+                                const form = event.currentTarget.form;
+                                if (form) form.offset.value = "";
+                            }}
+                            defaultValue={q.get("comics") || ''}
+                            type="text" name="comics" id="comics"
+                            placeholder="Comma separated list"
+                            className="block min-w-0 grow py-1.5 pl-1 pr-3 text-base focus:outline focus:outline-0 sm:text-sm/6 border rounded-md"></input>
                     </div>
                 </div>
                 <div className="flex-col invisible hidden">
@@ -41,7 +55,7 @@ export const Table = ({ results, total }: TableProps) => {
                     <button type="submit" className="rounded-md bg-indigo-600 px-3 py-2 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Search</button>
                 </div>
             </legend>
-            {results.length === 0 ? <p className="text-xl">No results</p> :
+            {total === 0 ? <p className="text-xl"><strong className="font-semibold">No results</strong></p> :
                 <table>
                     <thead>
                         <tr>
@@ -62,13 +76,7 @@ export const Table = ({ results, total }: TableProps) => {
                                         }}
                                     />
                                     {
-                                        q.get('orderBy') === '-name' ? <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                                        </svg>
-                                            :
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                                <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
-                                            </svg>
+                                        q.get('orderBy') === '-name' ? <ChevronDown /> : <ChevronUp />
                                     }
                                 </label>
                             </th>
@@ -93,8 +101,9 @@ export const Table = ({ results, total }: TableProps) => {
                                     const form = event.currentTarget.form;
                                     if (form) form.offset.value = offset - limit;
                                     submit(form, { replace: true });
-                                }} className={`text-blue-600 ${offset == 0 ? "invisible" : ""}`}>
-                                    Previous Page
+                                }}
+                                    className={`relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-5" ${offset == 0 ? "invisible" : ""}`}>
+                                    Previous
                                 </button>
                             </td>
                             <td>
@@ -102,8 +111,8 @@ export const Table = ({ results, total }: TableProps) => {
                                     const form = event.currentTarget.form;
                                     if (form) form.offset.value = offset + limit;
                                     submit(form, { replace: true });
-                                }} className={`text-blue-600 ${isNextPage ? "" : "invisible"}`}>
-                                    Next Page
+                                }} className={`relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 ${isNextPage ? "" : "invisible"}`}>
+                                    Next
                                 </button>
                             </td>
                         </tr>
