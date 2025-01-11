@@ -16,7 +16,7 @@ export const Table = ({ results, total }: TableProps) => {
 
     return (
         <Form>
-            <legend className="flex gap-2 mb-8 flex-col sm:flex-row border-solid border-violet-400 border bg-violet-100 dark:bg-gray-800 p-4">
+            <legend className="flex gap-2 mb-8 flex-col sm:flex-row border-violet-400 border bg-violet-100 dark:bg-gray-800 p-4">
                 <div className="flex-col">
                     <label htmlFor="name" className="block text-sm/6 font-medium">First name</label>
                     <div className="mt-2">
