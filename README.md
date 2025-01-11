@@ -1,8 +1,14 @@
-# Project Setup
+# Marvel Dashboard Setup
 
-For notes about setting up the project, see SETUP.md
+You will first need an API key from the marvel developer website. Save it in the .env file as follows:
 
-# Welcome to React Router!
+.env example format
+```
+MARVEL_PRIVATE_KEY=...private api key...
+VITE_APP_PUBLIC_MARVEL_KEY=...public api key...
+```
+
+## Welcome to React Router!
 
 A modern, production-ready template for building full-stack React applications using React Router.
 
