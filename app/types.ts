@@ -1,11 +1,16 @@
 
 export interface MarvelCharacterResult {
-    id: string;
-    name: string;
-    description: string;
-    thumbnail: {
-        path: string;
-        extension: string;
+    attributionText: string;
+    data: {
+        results: [{
+            id: string;
+            name: string;
+            description: string;
+            thumbnail: {
+                path: string;
+                extension: string;
+            }
+        }]
     }
 }
 

@@ -4,7 +4,7 @@
 
 html,
 body {
-  @apply bg-white dark:bg-gray-950;
+  @apply bg-gray-50 dark:bg-gray-950;
 
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
@@ -13,7 +13,7 @@ body {
 
 @layer components {
   td > button {
-    @apply relative inline-flex justify-center px-2 py-2 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 w-full;
+    @apply relative inline-flex justify-center px-2 py-2 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 focus:z-20 focus:outline-offset-0 w-full;
   }
   td > button:first-of-type {
     @apply rounded-l-md;

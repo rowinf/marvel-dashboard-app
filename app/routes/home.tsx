@@ -1,7 +1,7 @@
-import { fetcher } from "~/api";
 import { CharacterList } from "~/character/character-list";
 import type { Route } from "./+types/home";
 import type { MarvelCharacterData } from "~/types";
+import { ScreenLoader } from "~/loader";
 
 export function meta({ }: Route.MetaArgs) {
   return [
@@ -39,7 +39,7 @@ export async function clientLoader({
 }
 
 export function HydrateFallback() {
-  return <p>Loading Characters...</p>;
+  return <ScreenLoader />
 }
 
 export default function Home({ }: Route.ComponentProps) {

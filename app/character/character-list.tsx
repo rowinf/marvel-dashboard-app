@@ -1,4 +1,4 @@
-import { useLoaderData, useSubmit } from "react-router";
+import { useLoaderData } from "react-router";
 import { Table } from "../table/table";
 import type { MarvelCharacterData } from "~/types";
 
@@ -6,18 +6,12 @@ export function CharacterList() {
   let data = useLoaderData<MarvelCharacterData>();
 
   return (
-    <main className="flex items-center justify-center pt-8 pb-4">
-      <div className="flex-1 flex flex-col items-center gap-4 min-h-0">
-        <header className="flex flex-col items-center gap-9">
-          <h1 className="text-2xl">Marvel Dashboard</h1>
-        </header>
-        <div className="max-w-[900px] w-full space-y-6 px-4">
+      <main className="flex flex-col max-w-[900px] w-full mx-auto content-center pt-8 pb-4 gap-4">
+          <h1 className="text-2xl border-b-4">Marvel Dashboard</h1>
           <Table results={data.data.results} total={data.data.total} />
-        </div>
-        <footer>
-          <p className="text-sm">{data.attributionText}</p>
-        </footer>
-      </div>
-    </main>
+          <footer>
+              <p className="text-sm">{data.attributionText}</p>
+          </footer>
+      </main>
   );
 }

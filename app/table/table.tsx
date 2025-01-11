@@ -16,7 +16,7 @@ export const Table = ({ results, total }: TableProps) => {
 
     return (
         <Form>
-            <legend className="flex gap-2 mb-8 flex-col sm:flex-row border-solid border-violet-400 border bg-violet-100 p-4">
+            <legend className="flex gap-2 mb-8 flex-col sm:flex-row border-solid border-violet-400 border bg-violet-100 dark:bg-gray-800 p-4">
                 <div className="flex-col">
                     <label htmlFor="name" className="block text-sm/6 font-medium">First name</label>
                     <div className="mt-2">
@@ -56,12 +56,12 @@ export const Table = ({ results, total }: TableProps) => {
                 </div>
             </legend>
             {total === 0 ? <p className="text-xl"><strong className="font-semibold">No results</strong></p> :
-                <table className="block">
+                <table className="block sm:table w-full">
                     <thead>
                         <tr>
                             <th className="hidden sm:table-cell p-2">Thumbnail</th>
-                            <th className="p-2">
-                                <label className="cursor-pointer flex justify-center">
+                            <th>
+                                <label className="cursor-pointer flex justify-center p-2 hover:bg-gray-200 dark:hover:bg-gray-800">
                                     Name
                                     <input
                                         className="invisible"
@@ -90,9 +90,9 @@ export const Table = ({ results, total }: TableProps) => {
                                     <img src={`${result.thumbnail.path}.${result.thumbnail.extension}`} className="object-cover h-auto w-auto max-w-full"></img>
                                 </td>
                                 <td className="block sm:table-cell">
-                                    <Link to={`/character/${result.id}`} className="text-blue-600 hover:underline font-medium">{result.name}</Link>
+                                    <Link to={`/character/${result.id}`} className="text-blue-600 hover:underline font-medium text-lg">{result.name}</Link>
                                 </td>
-                                <td className="block sm:table-cell text-gray-700 text-sm col-span-2 w-fit max-w-96">{result.description}</td>
+                                <td className="block sm:table-cell text-sm col-span-2 w-fit max-w-96">{result.description}</td>
                             </tr>
                         ))}
                     </tbody>
