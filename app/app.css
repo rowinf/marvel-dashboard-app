@@ -10,3 +10,18 @@ body {
     color-scheme: dark;
   }
 }
+
+@layer components {
+  td > button {
+    @apply relative inline-flex justify-center px-2 py-2 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 w-full;
+  }
+  td > button:first-of-type {
+    @apply rounded-l-md;
+  }
+  td > button:last-of-type {
+    @apply rounded-r-md;
+  }
+  td > button:disabled {
+    @apply text-gray-300 cursor-not-allowed;
+  }
+}

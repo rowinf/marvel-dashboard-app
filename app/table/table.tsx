@@ -16,7 +16,7 @@ export const Table = ({ results, total }: TableProps) => {
 
     return (
         <Form>
-            <legend className="flex gap-2 mb-8">
+            <legend className="flex gap-2 mb-8 flex-col sm:flex-row border-solid border-violet-400 border bg-violet-100 p-4">
                 <div className="flex-col">
                     <label htmlFor="name" className="block text-sm/6 font-medium">First name</label>
                     <div className="mt-2">
@@ -56,11 +56,11 @@ export const Table = ({ results, total }: TableProps) => {
                 </div>
             </legend>
             {total === 0 ? <p className="text-xl"><strong className="font-semibold">No results</strong></p> :
-                <table>
+                <table className="block">
                     <thead>
                         <tr>
-                            <th>Thumbnail</th>
-                            <th>
+                            <th className="hidden sm:table-cell p-2">Thumbnail</th>
+                            <th className="p-2">
                                 <label className="cursor-pointer flex justify-center">
                                     Name
                                     <input
@@ -80,38 +80,47 @@ export const Table = ({ results, total }: TableProps) => {
                                     }
                                 </label>
                             </th>
-                            <th>Description</th>
+                            <th className="hidden sm:table-cell p-2">Description</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody className="flex flex-col flex-1 w-full sm:table-row-group gap-4">
                         {results.map((result: MarvelCharacterResult) => (
-                            <tr key={result.id}>
-                                <td className="text-center max-w-96">
-                                    <img src={`${result.thumbnail.path}.${result.thumbnail.extension}`} className="object-cover h-auto max-w-full"></img>
+                            <tr key={result.id} className="flex flex-col flex-1 gap-4 border-b md:gap-6 lg:gap-8 sm:table-row">
+                                <td className="text-center md:max-w-[6rem] lg:max-w-[12rem] block sm:table-cell">
+                                    <img src={`${result.thumbnail.path}.${result.thumbnail.extension}`} className="object-cover h-auto w-auto max-w-full"></img>
                                 </td>
-                                <td><Link to={`/character/${result.id}`} className="text-blue-600 hover:underline">{result.name}</Link></td>
-                                <td>{result.description}</td>
+                                <td className="block sm:table-cell">
+                                    <Link to={`/character/${result.id}`} className="text-blue-600 hover:underline font-medium">{result.name}</Link>
+                                </td>
+                                <td className="block sm:table-cell text-gray-700 text-sm col-span-2 w-fit max-w-96">{result.description}</td>
                             </tr>
                         ))}
                     </tbody>
-                    <tfoot>
-                        <tr>
-                            <td>
-                                <button onClick={(event) => {
-                                    const form = event.currentTarget.form;
-                                    if (form) form.offset.value = offset - limit;
-                                    submit(form, { replace: true });
-                                }}
-                                    className={`relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-5" ${offset == 0 ? "invisible" : ""}`}>
+                    <tfoot className="block pt-8">
+                        <tr className="flex flex-1 w-full">
+                            <td className="w-full">
+                                <button
+                                    type="button"
+                                    onClick={(event) => {
+                                        const form = event.currentTarget.form;
+                                        if (form) form.offset.value = offset - limit;
+                                        submit(form, { replace: true });
+                                    }}
+                                    disabled={offset == 0}
+                                >
                                     Previous
                                 </button>
                             </td>
-                            <td>
-                                <button onClick={(event) => {
-                                    const form = event.currentTarget.form;
-                                    if (form) form.offset.value = offset + limit;
-                                    submit(form, { replace: true });
-                                }} className={`relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 ${isNextPage ? "" : "invisible"}`}>
+                            <td className="w-full">
+                                <button
+                                    type="button"
+                                    onClick={(event) => {
+                                        const form = event.currentTarget.form;
+                                        if (form) form.offset.value = offset + limit;
+                                        submit(form, { replace: true });
+                                    }}
+                                    disabled={!isNextPage}
+                                >
                                     Next
                                 </button>
                             </td>
