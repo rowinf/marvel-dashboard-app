@@ -1,5 +1,5 @@
 export const Bars = () => (
-    <svg width="16" height="16" viewBox="0 0 135 140" xmlns="http://www.w3.org/2000/svg" fill="#494949">
+    <svg width="16" height="16" viewBox="0 0 135 140" xmlns="http://www.w3.org/2000/svg" className="fill-gray-600 dark:fill-gray-100">
         <rect y="10" width="15" height="120" rx="6">
             <animate attributeName="height"
                 begin="0.5s" dur="1s"

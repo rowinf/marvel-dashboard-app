@@ -1,5 +1,6 @@
-import { Form, Link, useSearchParams, useSubmit } from "react-router";
+import { Form, Link, useLocation, useNavigation, useSearchParams, useSubmit, useViewTransitionState } from "react-router";
 import { ChevronDown, ChevronUp } from "~/icons";
+import { Bars } from "~/loader";
 import type { MarvelCharacterResult } from "~/types";
 
 interface TableProps {
@@ -8,14 +9,16 @@ interface TableProps {
 }
 
 export const Table = ({ results, total }: TableProps) => {
+    const navigation = useNavigation();
     const [q] = useSearchParams();
     const limit = 20;
     const submit = useSubmit();
     const offset = Number(q.get("offset"))
-    const isNextPage = total > offset + results.length
+    const isNextPage = total > offset + results.length;
+    const isLoading = navigation.state != 'idle';
 
     return (
-        <Form>
+        <Form viewTransition>
             <legend className="flex gap-2 mb-8 flex-col sm:flex-row border-violet-400 border bg-violet-100 dark:bg-gray-800 p-4">
                 <div className="flex-col">
                     <label htmlFor="name" className="block text-sm/6 font-medium">First name</label>
@@ -48,11 +51,14 @@ export const Table = ({ results, total }: TableProps) => {
                 <div className="flex-col invisible hidden">
                     <label htmlFor="offset" className="block text-sm/6 font-medium">Offset</label>
                     <div className="mt-2">
-                        <input defaultValue={q.get("offset") || ''} type="text" name="offset" id="offset" placeholder="offset" className="block min-w-0 grow py-1.5 pl-1 pr-3 text-base focus:outline focus:outline-0 sm:text-sm/6 border rounded-md"></input>
+                        <input disabled={isLoading} defaultValue={q.get("offset") || ''} type="text" name="offset" id="offset" placeholder="offset" className="block min-w-0 grow py-1.5 pl-1 pr-3 text-base focus:outline focus:outline-0 sm:text-sm/6 border rounded-md"></input>
                     </div>
                 </div>
                 <div className="flex items-end justify-end gap-x-6">
-                    <button type="submit" className="rounded-md bg-indigo-600 px-3 py-2 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Search</button>
+                    <button type="submit" className="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-3 py-2 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                        Search
+                        {isLoading ? <Bars /> : null}
+                    </button>
                 </div>
             </legend>
             {total === 0 ? <p className="text-xl"><strong className="font-semibold">No results</strong></p> :
@@ -90,7 +96,7 @@ export const Table = ({ results, total }: TableProps) => {
                                     <img src={`${result.thumbnail.path}.${result.thumbnail.extension}`} className="object-cover h-auto w-auto max-w-full"></img>
                                 </td>
                                 <td className="block sm:table-cell">
-                                    <Link to={`/character/${result.id}`} className="text-blue-600 hover:underline font-medium text-lg">{result.name}</Link>
+                                    <Link to={`/character/${result.id}`} className="text-blue-600 hover:underline font-medium text-lg" viewTransition>{result.name}</Link>
                                 </td>
                                 <td className="block sm:table-cell text-sm col-span-2 w-fit max-w-96">{result.description}</td>
                             </tr>
@@ -106,7 +112,7 @@ export const Table = ({ results, total }: TableProps) => {
                                         if (form) form.offset.value = offset - limit;
                                         submit(form, { replace: true });
                                     }}
-                                    disabled={offset == 0}
+                                    disabled={offset == 0 || isLoading}
                                 >
                                     Previous
                                 </button>
@@ -119,7 +125,7 @@ export const Table = ({ results, total }: TableProps) => {
                                         if (form) form.offset.value = offset + limit;
                                         submit(form, { replace: true });
                                     }}
-                                    disabled={!isNextPage}
+                                    disabled={!isNextPage || isLoading}
                                 >
                                     Next
                                 </button>
