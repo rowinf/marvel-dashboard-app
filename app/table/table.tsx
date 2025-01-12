@@ -18,10 +18,14 @@ export const Table = ({ results, total, renderRow, hideControls, headers, render
     const submit = useSubmit();
     const offset = Number(q.get("offset"));
     const isNextPage = total > offset + results.length;
-    const isLoading = navigation.state != 'idle';
+    const isSubmiting = navigation.state === "submitting";
+    const isNavigating = navigation.state === "loading";
 
     return (
-        <>
+        <div className="relative">
+            {
+                isNavigating ? <div className="absolute inset-0 opacity-20 bg-gray-500 grid place-content-center"><Bars /></div> : null
+            }
             {
                 hideControls ? null :
                     <legend className="flex gap-2 mb-2 flex-col sm:flex-row border-violet-400 border bg-violet-100 dark:bg-gray-800 p-4">
@@ -39,13 +43,13 @@ export const Table = ({ results, total, renderRow, hideControls, headers, render
                         <div className="flex-col invisible hidden">
                             <label htmlFor="offset" className="block text-sm/6 font-medium">Offset</label>
                             <div className="mt-2">
-                                <input disabled={isLoading} defaultValue={q.get("offset") || ''} type="text" name="offset" id="offset" placeholder="offset" className="block min-w-0 grow py-1.5 pl-1 pr-3 text-base focus:outline focus:outline-0 sm:text-sm/6 border rounded-md"></input>
+                                <input disabled={isSubmiting} defaultValue={q.get("offset") || ''} type="text" name="offset" id="offset" placeholder="offset" className="block min-w-0 grow py-1.5 pl-1 pr-3 text-base focus:outline focus:outline-0 sm:text-sm/6 border rounded-md"></input>
                             </div>
                         </div>
                         <div className="flex items-end justify-end gap-x-6">
                             <button type="submit" className="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-3 py-2 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                                 Search
-                                {isLoading ? <Bars /> : null}
+                                {isSubmiting ? <Bars /> : null}
                             </button>
                         </div>
                     </legend>
@@ -72,7 +76,7 @@ export const Table = ({ results, total, renderRow, hideControls, headers, render
                                             if (form) form.offset.value = offset - limit;
                                             submit(form, { replace: true });
                                         }}
-                                        disabled={offset == 0 || isLoading}
+                                        disabled={offset == 0 || isSubmiting}
                                     >
                                         Previous
                                     </button>
@@ -85,7 +89,7 @@ export const Table = ({ results, total, renderRow, hideControls, headers, render
                                             if (form) form.offset.value = offset + limit;
                                             submit(form, { replace: true });
                                         }}
-                                        disabled={!isNextPage || isLoading}
+                                        disabled={!isNextPage || isSubmiting}
                                     >
                                         Next
                                     </button>
@@ -95,7 +99,7 @@ export const Table = ({ results, total, renderRow, hideControls, headers, render
                     }
                 </table>
             }
-        </>
+        </div>
     )
 
 }
