@@ -2,6 +2,7 @@ import { Form, Link, useLoaderData, useSearchParams, useSubmit } from "react-rou
 import { Table } from "../table/table";
 import type { MarvelCharacterData } from "~/types";
 import { ChevronDown, ChevronUp } from "~/icons";
+import { CharacterThumbnail } from "./character-thumbnail";
 
 export function CharacterList() {
     let data = useLoaderData<MarvelCharacterData>();
@@ -20,7 +21,7 @@ export function CharacterList() {
                         return (
                             <tr key={result.id} className="flex flex-col flex-1 gap-4 border-b md:gap-6 lg:gap-8 sm:table-row">
                                 <td className="text-center md:max-w-[6rem] lg:max-w-[12rem] block sm:table-cell">
-                                    <img src={`${result.thumbnail.path}.${result.thumbnail.extension}`} className="object-cover h-auto w-auto max-w-full"></img>
+                                    <CharacterThumbnail thumbnail={result.thumbnail} href={`/character/${result.id}`} />
                                 </td>
                                 <td className="block sm:table-cell">
                                     <Link to={`/character/${result.id}`} className="text-blue-600 hover:underline font-medium text-lg" viewTransition>{result.name}</Link>
