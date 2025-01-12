@@ -12,7 +12,10 @@ export function CharacterList() {
     return (
         <main className="flex flex-col max-w-screen-lg lg:mx-auto mx-4 pt-8 pb-4 gap-4">
             <h1 className="text-2xl border-b-4">Marvel Dashboard</h1>
-            <Form viewTransition>
+            <Form viewTransition onSubmit={(event) => {
+                event.preventDefault()
+                submit(event.currentTarget, {replace: true})
+            }}>
                 <Table
                     headers={["Thumbnail", "Name", "Description"]}
                     results={data.data.results}
